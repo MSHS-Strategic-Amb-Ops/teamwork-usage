@@ -481,8 +481,8 @@ plf_enabled_pattern <- plf_enabled %>%
 
 
 # Order Columns 
-col_order <- c("PARENT_LOC_NAME", "PARENT_LOCATION_ID", "RECORD_NAME", "RECORD_ID",
-               "DISPLAY_NAME", "PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C",
+col_order <- c("PARENT_LOC_NAME", "PARENT_LOCATION_ID",  "DISPLAY_NAME", "RECORD_NAME", "RECORD_ID",
+               "PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C",
                "MON_AM", "MON_PM", "MON_EVE",
                "TUE_AM", "TUE_PM", "TUE_EVE",
                "WED_AM", "WED_PM", "WED_EVE",
@@ -572,10 +572,10 @@ reactable(
   groupBy = c("MSHS", "PARENT_LOC_NAME"),
 
   columnGroups = list(
-    colGroup(name = "", columns = c("MSHS", "PARENT_LOC_NAME", "RECORD_NAME", "DISPLAY_NAME", "PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C"),
+    colGroup(name = "", columns = c("MSHS", "PARENT_LOC_NAME",  "DISPLAY_NAME"),
              headerStyle = list(color = "black", fontSize = "15px"),
              sticky = "left"),
-    colGroup(name = "", columns = c("PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C"),
+    colGroup(name = "", columns = c("RECORD_NAME", "PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C"),
              headerStyle = list(color = "black", fontSize = "15px")),
     colGroup(name = paste0("PATTERN ASSIGNMENT STATUS"),
              columns = c("MON_AM", "MON_PM", "MON_EVE",
