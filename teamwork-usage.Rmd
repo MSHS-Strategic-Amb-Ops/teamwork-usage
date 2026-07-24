@@ -575,6 +575,8 @@ reactable(
     colGroup(name = "", columns = c("MSHS", "PARENT_LOC_NAME", "RECORD_NAME", "DISPLAY_NAME", "PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C"),
              headerStyle = list(color = "black", fontSize = "15px"),
              sticky = "left"),
+    colGroup(name = "", columns = c("PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C"),
+             headerStyle = list(color = "black", fontSize = "15px")),
     colGroup(name = paste0("PATTERN ASSIGNMENT STATUS"),
              columns = c("MON_AM", "MON_PM", "MON_EVE",
                          "TUE_AM", "TUE_PM", "TUE_EVE",
