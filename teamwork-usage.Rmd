@@ -1190,8 +1190,8 @@ reactable(
 ) # Close htmltools
 
 ```
-<br/>
-<p style="font-size:10pt; font-style:italic">*New Patient is defined by level of service; Physician New Patient Ratio is calculated based on visits completed (Total New Patients Arrived / Total Patients Arrived) by Prov Type = Physician, Fellow, Resident, Nurse Practitioner, and Physician Assistant<p/>
-<p style="font-size:10pt; font-style:italic">-Template Utilization excludes providers with monthly provider utilization <35% or >200%.<p/>
-<p style="font-size:10pt; font-style:italic">*Primary Care includes Adolescent Medicine, Community and Preventative Medicine, Internal Medicine, Family Medicine, Pediatrics, Geriatrics, Urgent Care<p/>
-<br/>
+<!-- <br/> -->
+<!-- <p style="font-size:10pt; font-style:italic">*New Patient is defined by level of service; Physician New Patient Ratio is calculated based on visits completed (Total New Patients Arrived / Total Patients Arrived) by Prov Type = Physician, Fellow, Resident, Nurse Practitioner, and Physician Assistant<p/> -->
+<!-- <p style="font-size:10pt; font-style:italic">-Template Utilization excludes providers with monthly provider utilization <35% or >200%.<p/> -->
+<!-- <p style="font-size:10pt; font-style:italic">*Primary Care includes Adolescent Medicine, Community and Preventative Medicine, Internal Medicine, Family Medicine, Pediatrics, Geriatrics, Urgent Care<p/> -->
+<!-- <br/> -->
