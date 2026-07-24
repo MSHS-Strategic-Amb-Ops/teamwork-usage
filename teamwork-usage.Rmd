@@ -398,6 +398,30 @@ visitFact_conn <- tbl(conn5, dbplyr::ident_q('"Caboodle"."VisitFact"'))
 ```
 
 
+```{r Report Variables, echo = FALSE, warning = FALSE, message = FALSE}
+
+report_run_date <- format(Sys.Date(), "%Y-%m-%d")
+date_start <- format(Sys.Date() +1, "%Y-%m-%d")
+
+date_start_next30 <- format(Sys.Date() + 30, "%Y-%m-%d")
+date_start_next90 <- format(Sys.Date() + 90, "%Y-%m-%d")
+
+date_start_last30 <- format(Sys.Date() - 30, "%Y-%m-%d")
+date_start_last90 <- format(Sys.Date() - 90, "%Y-%m-%d")
+
+date_start_last4mo <- format(floor_date(Sys.Date(), unit = "month") - months(3), "%Y-%m-%d")
+date_start_last12mo <- format(floor_date(Sys.Date(), unit = "month") - months(12), "%Y-%m-%d")
+
+current_year <- format(Sys.Date(), "%Y")
+prior_year <- as.character(as.numeric(current_year) -1)
+
+current_month <- format(Sys.Date(), "%m")
+current_year_month <- paste0(current_year,"-",current_month)
+
+
+```
+
+
 ```{r room Assignment Audit}
 
 room_bookings <- tbl(conn2, "SHIFT_PTRN_ROOM_BOOKINGS") %>%
@@ -465,11 +489,26 @@ plf_enabled <- tbl(conn2, "CL_PLF") %>%
               dplyr::select(RECORD_ID, RECORD_NAME) %>%
               rename("PARENT_LOC_NAME" = RECORD_NAME),
             by = c("PARENT_LOCATION_ID" = "RECORD_ID")) %>%
-  dplyr::select(PARENT_LOC_NAME, PARENT_LOCATION_ID, RECORD_NAME, RECORD_ID,  DISPLAY_NAME,  
+  
+  # left_join(tbl(conn2, "ZC_PT_LOC_TYPE") %>%
+  #             dplyr::select(PT_LOC_TYPE_C, NAME) %>%
+  #             rename("PT_LOC_NAME" = NAME)) %>%
+  
+  left_join(tbl(conn2, "ZC_PT_ROOM_TYPE") %>%
+              dplyr::select(PT_ROOM_TYPE_C, NAME) %>%
+              rename("PT_ROOM_TYPE" = NAME)) %>%
+  
+  # left_join(tbl(conn2, "ZC_WING_GROUPER") %>%
+  #             dplyr::select(WING_GROUPER_C, NAME) %>%
+  #             rename("WING_GROUPER" = NAME)) %>%
+  
+  dplyr::select(PARENT_LOC_NAME, PARENT_LOCATION_ID, 
+                # WING_GROUPER, 
+                RECORD_NAME, RECORD_ID,  DISPLAY_NAME,  
                 # RECORD_STATUS_C, 
-                PT_LOC_TYPE_C, 
+                # PT_LOC_NAME,
                 RECORD_CREATION_DT,
-                PT_ROOM_TYPE_C
+                PT_ROOM_TYPE
                 # DEPARTMENT_ID
                 ) %>%
   collect()
@@ -481,8 +520,8 @@ plf_enabled_pattern <- plf_enabled %>%
 
 
 # Order Columns 
-col_order <- c("PARENT_LOC_NAME", "PARENT_LOCATION_ID",  "DISPLAY_NAME", "RECORD_NAME", "RECORD_ID",
-               "PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C",
+col_order <- c("PARENT_LOC_NAME", "PARENT_LOCATION_ID",  "PT_ROOM_TYPE", "DISPLAY_NAME", "RECORD_NAME", "RECORD_ID",
+               "RECORD_CREATION_DT", 
                "MON_AM", "MON_PM", "MON_EVE",
                "TUE_AM", "TUE_PM", "TUE_EVE",
                "WED_AM", "WED_PM", "WED_EVE",
@@ -521,6 +560,23 @@ plf_enabled_pattern_2 <- plf_enabled_pattern %>%
 
 ```
 
+
+
+```{r Sinai Logo, echo=FALSE, out.width = '15%'}
+knitr::include_graphics("Mount_Sinai_Logo_H.png")
+```
+
+
+# EPIC Teamwork-Room Tracker Usage Compliance Report {.tabset .tabset-fade .tabset-pills}
+*Report run date: `r report_run_date`*<br/><br/>
+<p style="font-size:12pt; font-style:italic">PG Status/ Updates Required Definitions:</p>
+<ul style="font-size:12pt; font-style:italic">
+  <li>Includes rooms enabled for the Room Tracker only</li>
+</ul>
+
+______________________________________________________________________________________________________________________________
+<br/>
+<br/>
 
 
 ## Pattern Assignment
@@ -569,13 +625,13 @@ reactable(
     wrap = TRUE,
   searchable = TRUE,
 
-  groupBy = c("MSHS", "PARENT_LOC_NAME"),
+  groupBy = c("MSHS", "PARENT_LOC_NAME", "PT_ROOM_TYPE"),
 
   columnGroups = list(
-    colGroup(name = "", columns = c("MSHS", "PARENT_LOC_NAME",  "DISPLAY_NAME"),
+    colGroup(name = "", columns = c("MSHS", "PARENT_LOC_NAME", "PT_ROOM_TYPE", "DISPLAY_NAME"),
              headerStyle = list(color = "black", fontSize = "15px"),
              sticky = "left"),
-    colGroup(name = "", columns = c("RECORD_NAME", "PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C"),
+    colGroup(name = "", columns = c("RECORD_NAME", "RECORD_CREATION_DT", "PT_ROOM_TYPE"),
              headerStyle = list(color = "black", fontSize = "15px")),
     colGroup(name = paste0("PATTERN ASSIGNMENT STATUS"),
              columns = c("MON_AM", "MON_PM", "MON_EVE",
@@ -610,15 +666,23 @@ reactable(
       minWidth = 150),
     
     PARENT_LOC_NAME = colDef(
+      name = "Parent Location",
       minWidth = 400),
     
+    PT_ROOM_TYPE = colDef(
+      name = "Room Type",
+      minWidth = 200),
+    
     RECORD_NAME = colDef(
+      name = "Record Name",
       minWidth = 400),
 
     DISPLAY_NAME = colDef(
+      name = "Display Name",
       minWidth = 150),
     
     RECORD_CREATION_DT = colDef(
+      name = "Record Created Date",
       maxWidth = 150),
 
     
