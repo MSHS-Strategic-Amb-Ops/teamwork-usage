@@ -7,7 +7,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 <style type="text/css">
 div.main-container {
-  max-width: 2000px;
+  max-width: 3000px;
   margin-left: 0;
   margin-right: auto;
 }
@@ -569,7 +569,7 @@ knitr::include_graphics("Mount_Sinai_Logo_H.png")
 
 # EPIC Teamwork-Room Tracker Usage Compliance Report {.tabset .tabset-fade .tabset-pills}
 *Report run date: `r report_run_date`*<br/><br/>
-<p style="font-size:12pt; font-style:italic">PG Status/ Updates Required Definitions:</p>
+<p style="font-size:12pt; font-style:italic">Inclusion Criteria</p>
 <ul style="font-size:12pt; font-style:italic">
   <li>Includes rooms enabled for the Room Tracker only</li>
 </ul>
