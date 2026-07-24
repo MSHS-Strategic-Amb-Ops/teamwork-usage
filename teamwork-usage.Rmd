@@ -1,0 +1,1131 @@
+---
+output:
+  html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+<style type="text/css">
+div.main-container {
+  max-width: 2000px;
+  margin-left: 0;
+  margin-right: auto;
+}
+</style>
+<style>
+.tocify {
+color: black;
+}
+<!-- } -->
+<!-- .tocify .tocify-header { -->
+<!--     position: fixed; -->
+<!--     <!-- top: 50px; --> -->
+<!--     left: 50px; -->
+<!--     width: 350px; -->
+<!--     <!-- border: solid 3px black; --> -->
+<!--     <!-- height: 200px; --> -->
+<!--  border: none; -->
+<!-- } -->
+.tocify .tocify-header .active {
+color: white;
+background: #d80b8c;
+font-weight: bold;
+}
+<!-- .tocify .tocify-item { -->
+<!-- background: white; -->
+<!-- color: black; -->
+<!--  border: none; -->
+<!-- } -->
+</style>
+<style>
+  .nav-pills>li>a:hover, .nav-pills>li>a:focus, .nav-pills>li.active>a,     .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{
+     background-color: #212070;
+     }
+</style>
+<style>
+.container { width: 1800px; }
+h2 {
+  background-color: #dddedd;
+  color: black;
+  text-indent: 20px;
+  <!-- font-weight: bold; -->
+}
+h3 {
+  background-color: #f2f2f2;
+  color: black;
+  text-indent: 20px;
+  <!-- font-weight: bold; -->
+}
+h4 {
+  <!-- background-color: #dddedd; -->
+  <!-- color: black; -->
+  text-indent: 50px;
+  <!-- font-weight: bold; -->
+}
+</style>
+<style>
+.blackbox {
+  padding: 1em;
+  background: white;
+  color: black;
+  border: 2px solid #7f7f7f;
+  width: 100%;
+  position: center;
+  align: center;
+  margin: 0px auto;
+}
+.center {
+  text-align: left;
+  margin: 0px auto;
+}
+</style>
+<!-- ```{css toc-content, echo = FALSE} -->
+<!-- #TOC { -->
+<!--   right: 270px; -->
+<!--   margin: 20px 0px 25px 0px; -->
+<!-- } -->
+<!-- .main-container { -->
+<!--     margin-left: 200px; -->
+<!-- } -->
+<!-- ``` -->
+```{r Load Packages, echo = FALSE, warning = FALSE, message = FALSE}
+
+# # Load packages -----------------------------------------------------------------------------------
+suppressMessages({
+  memory.limit(size = 8000000)
+  library(readxl)
+  library(writexl)
+  library(plyr)
+  library(dplyr)
+  library(data.table)
+  library(zoo)
+  library(shiny)
+  library(shinydashboard)
+  library(shinydashboardPlus)
+  library(shinyWidgets)
+  library(htmlwidgets)
+  library(lubridate)
+  library(tcltk)
+  library(tidyverse)
+  library(plotly)
+  library(knitr)
+  library(kableExtra)
+  library(leaflet)
+  library(grid)
+  library(gridExtra)
+  library(eeptools)
+  library(ggQC)
+  library(zipcodeR)
+  library(utils)
+  library(scales)
+  library(chron)
+  library(bupaR)
+  library(shiny)
+  library(DT)
+  library(DiagrammeR)
+  library(shinyalert)
+  library(edeaR)
+  library(processmapR)
+  library(processmonitR)
+  library(processanimateR)
+  library(tidyr)
+  library(lubridate)
+  library(RColorBrewer)
+  library(DiagrammeR)
+  library(ggplot2)
+  library(leaflet)
+  library(readr)
+  library(highcharter)
+  library(ggforce) # for 'geom_arc_bar'
+  library(packcircles) # for packed circle graph
+  library(viridis)
+  library(ggiraph)
+  library(treemapify)
+  library(treemap)
+  library(broom)
+  library(extrafont)
+  library(tis) # for US holidays
+  library(vroom)
+  library(sjmisc)
+  library(tools)
+  library(here)
+  library(shinyBS)
+  library(shinyscreenshot)
+  library(fasttime)
+  library(shinycssloaders)
+  library(feather)
+  # library(zipcodeR)
+  library(formattable)
+  library(shinyjs)
+  library(janitor)
+  library(patchwork)
+  library(flexdashboard)
+  # library(tidyverse)
+  # library(viridis)
+  # library(hrbrthemes)
+  # library(plotly)
+  # install.packages("bsts")
+  library(bsts)
+  library(reactable)
+  # install.packages("reactablefmtr")
+  library(reactablefmtr)
+  library(svDialogs)
+  # library(openxlsx)
+  library(flextable)
+  library(officedown)
+  library(officer)
+  library(magrittr)
+  library(webshot) 
+  library(png)
+  library(ggh4x)
+  library(RODBC)
+  library(DBI)
+  library(odbc)
+  library(dbplyr)
+  library(pool)
+  library(emojifont)
+  library(lubridate)
+})
+
+# devtools::install_github("hafen/lazyrmd")
+# require(lazyrmd)
+# 
+# options(repos = c(tessera = "http://packages.tessera.io",
+#   getOption("repos")))
+# install.packages("lazyrmd")
+# require(lazyrmd)
+
+```
+
+
+```{r Graph asthetics, echo = FALSE, warning = FALSE, message = FALSE}
+### Color Functions for Graphs ============================================================
+
+# Mount Sinai corporate colors "USE THIS TO ADD COLORS"
+MountSinai_colors <- c(
+  `dark purple`  = "#212070",
+  `dark pink`    = "#d80b8c",
+  `dark blue`    = "#00aeef",
+  `dark grey`    = "#7f7f7f",
+  `yellow`       = "#ffc000",
+  `purple`       = "#7030a0",
+  `med purple`   = "#5753d0",
+  `med pink`     = "#f75dbe",
+  `med blue`     = "#5cd3ff",
+  `med grey`     = "#a5a7a5",
+  `light purple` = "#c7c6ef",
+  `light pink`   = "#fcc9e9",
+  `light blue`   = "#c9f0ff",
+  `light grey`   = "#dddedd"
+  )
+
+# Function to extract Mount Sinai colors as hex codes
+# Use Character names of MountSinai_colors
+
+MountSinai_cols <- function(...) {
+  cols <- c(...)
+  
+  if (is.null(cols))
+    return (MountSinai_colors)
+  
+  MountSinai_colors[cols]
+}
+
+# Color Function that can be used to call all colors is "MountSinai_cols()"
+# Use in ggplot 
+
+  #MountSinai_cols()       # will provide all colors and their hex codes in a table 
+  #MountSinai_cols("pink") # will provide color name and the hex code for the pink color
+
+# Create palettes 
+MountSinai_palettes <- list(
+  `all`   = MountSinai_cols("dark purple","dark pink","dark blue","dark grey",
+                            "med purple","med pink","med blue","med grey", 
+                            "light purple","light pink","light blue","light grey"),
+  
+  `main`  = MountSinai_cols("dark purple","dark pink","dark blue","dark grey"),
+  
+  `purple`  = MountSinai_cols("dark purple","med purple","light purple"),
+  
+  `pink`  = MountSinai_cols("dark pink","med pink","light pink"),
+  
+  `blue`  = MountSinai_cols("dark blue", "med blue", "light blue"),
+  
+  `grey`  = MountSinai_cols("dark grey", "med grey", "light grey"),
+  
+  `purpleGrey` = MountSinai_cols("dark purple", "dark grey"),
+  
+  `pinkBlue` = MountSinai_cols("dark pink", "dark blue")
+  
+)
+
+# MountSinai_palettes
+# Return function to interpolate a Mount Sinai color palette
+# default value is the main palette, reverse = True will change the order
+
+MountSinai_pal <- function(palette = "all", reverse = FALSE, ...) {
+  pal <- MountSinai_palettes[[palette]]
+  
+  if (reverse) pal <- rev(pal)
+  
+  colorRampPalette(pal, ...)
+}
+
+
+
+# Scale Function for ggplot can be used instead of scale_color_manual
+scale_color_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FALSE, ...) {
+  pal <- MountSinai_pal(palette = palette, reverse = reverse)
+  
+  if (discrete) {
+    discrete_scale("colour", paste0("MountSinai_", palette), palette = pal, ...)
+  } else {
+    scale_color_gradientn(colours = pal(256), ...)
+  }
+}
+
+# Scale Fill for ggplot insetead of scale_fill_manual 
+scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FALSE, ...) {
+  pal <- MountSinai_pal(palette = palette, reverse = reverse)
+
+  if (discrete) {
+    discrete_scale("fill", paste0("MountSinai_", palette), palette = pal, ...)
+  } else {
+    scale_fill_gradientn(colours = pal(256), ...)
+  }
+}
+
+# Use in ggplot 
+  # scale_color_MountSinai("main")
+
+```
+
+
+```{r Global Functions, echo = FALSE, warning = FALSE, message = FALSE}
+
+'%!in%' <- function(x,y)!('%in%'(x,y)) # Does not include
+not_all_na <- function(x) all(!is.na(x)) # Exclude columns with All NAs
+
+```
+
+
+```{r Data Connections, echo = FALSE, warning = FALSE, message = FALSE}
+
+# Connection to Oracle DB ------------------------------------------------------
+conn1 <- dbPool(drv = odbc(), dsn = "OAO Cloud DB SoYoun", timeout = 30)
+conn3 <- dbPool(drv = odbc(), dsn = "OAO Cloud DB Production", timeout = 30)
+conn2 <- dbConnect(odbc(), 
+                  "Clarity_prod", 
+                  uid = "kweons01" , 
+                  pwd = "kweons01123$")
+conn4 <- dbPool(drv = odbc(), dsn = "OAO Cloud DB Staging", timeout = 30)
+
+conn5 <- dbConnect(odbc(),
+                    Driver = "SQLServer",
+                    # Server = "10.2.42.69", # old server
+                    Server = "datahub-synapse.sql.azuresynapse.net",
+                    database = "datahub_epic_dw",
+                    UID = "MSS_USER",
+                    PWD = "Apple_Bees456$",
+                    Port = 1433)
+
+
+
+# Clarity Connection  ------------------------------------------------
+slot_raw_tbl <- tbl(conn2, "Y_DM_BOOKED_FILLED_RATE")
+access_raw_tbl <- tbl(conn2, "MV_DM_PATIENT_ACCESS")
+f_sched_appt_tbl <- tbl(conn2, "F_SCHED_APPT")
+availability_raw_tbl <- tbl(conn2, "V_AVAILABILITY")
+block_raw_tbl <- tbl(conn2, "AVAIL_BLOCK")
+block_name_tbl <- tbl(conn2, "ZC_APPT_BLOCK")
+orders_raw_tbl <- tbl(conn2, "ORDER_PROC")
+visit_type_tbl <- tbl(conn2, "CL_PRC_VT_GROUPS")
+visit_type_mapping_tbl <- tbl(conn2, "ZC_VISIT_TYPE_GRP")
+
+dep_mapping_tbl <- tbl(conn2, "CLARITY_DEP")
+dep_mapping <- dep_mapping_tbl %>%
+  # dplyr::select(DEPARTMENT_ID, SPECIALTY) %>%
+  collect()
+
+clarity_ser_tbl <- tbl(conn2, "CLARITY_SER")
+clarity_ser_2_tbl <- tbl(conn2, "CLARITY_SER_2")
+
+finclass_tbl <- tbl(conn2, "V_PB_EPP_CUSTOM_PRD_TYPE")
+
+
+# Local Connection ---------------------------------------------------
+radiology_dep_mapping_tbl <- tbl(conn1, "RADIOLOGY_DEP_MAPPING")
+
+clarity_ser_tbl_loc <- tbl(conn1, "CLARITY_SER")
+clarity_ser_2_tbl_loc <- tbl(conn1, "CLARITY_SER_2")
+
+dep_mapping_tbl_loc <- tbl(conn1, "CLARITY_DEP")
+
+slot_data_raw_tbl <- tbl(conn1, "ALL_SLOTS")
+slot_data_tbl <- tbl(conn1, "SLOT_DATA")
+slot_data_prc_raw_tbl <- tbl(conn1, "ALL_SLOTS_PRC")
+slot_data_prc_tbl <- tbl(conn1, "SLOT_DATA_PRC")
+
+block_raw_tbl_loc <- tbl(conn1, "AVAIL_BLOCK")
+block_name_tbl_loc <- tbl(conn1, "ZC_APPT_BLOCK")
+
+
+
+
+#slot_view_tbl <- tbl(conn3, in_schema("OAO_PRODUCTION", "AMBULATORY_SLOT_TABLE"))
+
+
+# Azure Connection ---------------------------------------------------
+# access_raw_tbl <- tbl(conn5, in_schema("CLARITY", "MV_DM_PATIENT_ACCESS"))
+# f_sched_appt_tbl <- tbl(conn5, dbplyr::ident_q('"CLARITY"."F_SCHED_APPT"'))
+clarity_dep_conn <- tbl(conn5, dbplyr::ident_q('"Clarity"."CLARITY_DEP"'))
+
+referrals_conn <- tbl(conn5, dbplyr::ident_q('"MS_SOLUTIONS_DEV"."y_s2_referrals_tmp"'))
+caboodle_referrals_conn <- tbl(conn5, dbplyr::ident_q('"CABOODLE"."ReferralsDataView"'))
+caboodle_referralFact_conn <- tbl(conn5, dbplyr::ident_q('"CABOODLE"."ReferralFact"'))
+patient_conn <- tbl(conn5, dbplyr::ident_q('"CABOODLE"."PatientDim"'))
+department_conn <- tbl(conn5, dbplyr::ident_q('"CABOODLE"."DepartmentDim"'))
+
+clarity_referrals_tbl <- tbl(conn5, dbplyr::ident_q('"Clarity"."REFERRAL"'))
+clarity_referrals_wq_tbl <- tbl(conn5, dbplyr::ident_q('"Clarity"."REFERRAL_WQ"'))
+
+visitFact_conn <- tbl(conn5, dbplyr::ident_q('"Caboodle"."VisitFact"'))
+
+
+# conn6 <- dbPool(drv = odbc(), dsn = "Caboodle", timeout = 30)
+
+
+```
+
+
+```{r room Assignment Audit}
+
+room_bookings <- tbl(conn2, "SHIFT_PTRN_ROOM_BOOKINGS") %>%
+  # filter(SHIFT_ID == "428766") %>%
+  left_join(tbl(conn2, "CLARITY_SER") %>%
+              dplyr::select(PROV_ID, PROV_NAME),
+            by = c("PATTERN_BOOKING_PROV_ID" = "PROV_ID")) %>%
+  left_join(tbl(conn2, "CLARITY_DEP") %>%
+              dplyr::select(DEPARTMENT_ID, DEPARTMENT_NAME),
+            by = c("PATTERN_BOOKING_DEPT_ID" = "DEPARTMENT_ID")) %>%
+  collect()
+
+sched_shifts <- tbl(conn2, "ROOM_SCHEDULED_SHIFTS") %>%
+  filter(SHIFT_ID == "317396") %>%
+  # filter(SHIFT_ROOM_ID == "29550") %>%
+  # group_by(SHIFT_ROOM_ID, DEPARTMENT_ID) %>%
+  # summarise(scheduled_shifts = n_distinct(SHIFT_ID)) 
+  # group_by( SHIFT_RECORD_TYPE_C) %>%
+  # summarise(total = n()) %>%
+  collect()
+
+pattern_shifts <- tbl(conn2, "ROOM_PATTERN_SHIFTS") %>%
+  # filter(SHIFT_ID == "503765") %>%
+  # filter(SHIFT_ROOM_ID == "29550") %>%
+  head(100) %>%
+  collect()
+
+
+check <- tbl(conn2, "ROOM_PATTERN_SHIFTS") %>%
+  filter(SHIFT_STATUS_C == 2) %>%
+  group_by(SHIFT_ROOM_ID) %>%
+  summarise(total = n_distinct(SHIFT_ID)) %>%
+  collect()
+
+
+
+
+shift_pattern <- tbl(conn2, "ROOM_PATTERN_SHIFTS") %>%
+  mutate(PATTERN_DAY_OF_WEEK = case_when(PATTERN_DAY_OF_WEEK_C == 1 ~ "SUN",
+                                         PATTERN_DAY_OF_WEEK_C == 2 ~ "MON",
+                                         PATTERN_DAY_OF_WEEK_C == 3 ~ "TUE",
+                                         PATTERN_DAY_OF_WEEK_C == 4 ~ "WED",
+                                         PATTERN_DAY_OF_WEEK_C == 5 ~ "THU",
+                                         PATTERN_DAY_OF_WEEK_C == 6 ~ "FRI",
+                                         PATTERN_DAY_OF_WEEK_C == 7 ~ "SAT", TRUE ~ "")) %>%
+  mutate(SHIFT_SESSION_TYPE = case_when(SHIFT_SESSION_TYPE_C == 1 ~ "AM",
+                                        SHIFT_SESSION_TYPE_C == 2 ~ "PM",
+                                        SHIFT_SESSION_TYPE_C == 3 ~"EVE", TRUE ~ "")) %>%
+  group_by(SHIFT_ROOM_ID, PATTERN_DAY_OF_WEEK, SHIFT_SESSION_TYPE) %>%
+  summarise(pattern_shift_yn = 1) %>%
+  collect() %>%
+  pivot_wider(names_from = c("PATTERN_DAY_OF_WEEK", "SHIFT_SESSION_TYPE"),
+              values_from = pattern_shift_yn,
+              values_fill = 0) 
+
+
+# List of Locations and Rooms with PLF Record ----------------------------------
+
+plf_enabled <- tbl(conn2, "CL_PLF") %>%
+  # filter(RECORD_ID == "29539") %>%
+  filter(is.na(RECORD_STATUS_C)) %>%
+  filter(PT_LOC_TYPE_C == 3) %>%
+  filter(ROOM_TRACKER_ON_YN == "Y") %>%
+  left_join(tbl(conn2, "CL_PLF") %>%
+              dplyr::select(RECORD_ID, RECORD_NAME) %>%
+              rename("PARENT_LOC_NAME" = RECORD_NAME),
+            by = c("PARENT_LOCATION_ID" = "RECORD_ID")) %>%
+  dplyr::select(PARENT_LOC_NAME, PARENT_LOCATION_ID, RECORD_NAME, RECORD_ID,  DISPLAY_NAME,  
+                # RECORD_STATUS_C, 
+                PT_LOC_TYPE_C, 
+                RECORD_CREATION_DT,
+                PT_ROOM_TYPE_C
+                # DEPARTMENT_ID
+                ) %>%
+  collect()
+
+
+plf_enabled_pattern <- plf_enabled %>%
+  left_join(shift_pattern,
+            by = c("RECORD_ID" = "SHIFT_ROOM_ID")) 
+
+
+# Order Columns 
+col_order <- c("PARENT_LOC_NAME", "PARENT_LOCATION_ID", "RECORD_NAME", "RECORD_ID",
+               "DISPLAY_NAME", "PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C",
+               "MON_AM", "MON_PM", "MON_EVE",
+               "TUE_AM", "TUE_PM", "TUE_EVE",
+               "WED_AM", "WED_PM", "WED_EVE",
+               "THU_AM", "THU_PM", "THU_EVE",
+               "FRI_AM", "FRI_PM", "FRI_EVE")
+
+
+remaining_cols <- as.vector(setdiff(colnames(plf_enabled_pattern), col_order))
+col_order <- c(col_order, remaining_cols)
+
+plf_enabled_pattern <- plf_enabled_pattern %>%
+  dplyr::select(col_order)
+
+
+
+
+plf_enabled_pattern_2 <- plf_enabled_pattern %>%
+  ungroup() %>%
+  mutate(
+    across(
+      MON_AM:FRI_EVE,
+      ~ tidyr::replace_na(., 0)
+    )
+  ) %>%
+  ungroup() %>%
+  mutate(
+    across(
+      MON_AM:FRI_EVE,
+      ~ 1,
+      .names = "{.col}_TOTAL"
+    )
+  ) %>%
+  arrange(PARENT_LOC_NAME, RECORD_NAME) %>%
+  mutate(MSHS = "MSHS") %>%
+  relocate(MSHS, .before = "PARENT_LOC_NAME")
+
+```
+
+
+
+## Pattern Assignment
+```{r Metrics by Department - Month, echo = FALSE, warning = FALSE, message = FALSE}
+
+
+htmltools::browsable(
+  tagList(
+    tags$button(
+      tagList(fontawesome::fa("download"), "Download Table"),
+      onclick = "Reactable.downloadDataCSV('pattern-assignment', 'EPIC Room Tracker Pattern Util')"
+    ),
+
+# htmltools::browsable(
+#   tagList(
+#     div(tags$label("Summary by", `for` = "access-metrics")),
+#     tags$select(
+#       id = "new-pt-waitTime",
+#       onchange = "Reactable.setGroupBy('access-metrics', this.value ? [this.value] : [])",
+#       tags$option("None", value = ""),
+#       lapply(c("Year", "Year-Month", "SITE", "Specialty Type", "Specialty"), tags$option)
+#     ),
+# 
+#     tags$hr("aria-hidden" = "true"),
+#     
+reactable(
+  plf_enabled_pattern_2 %>%
+    mutate(RECORD_CREATION_DT = as.character(RECORD_CREATION_DT)),
+  elementId = "pattern-assignment",
+  # elementId = "referral-vol-download-table",
+  style = list(fontFamily = 'Calibri',
+                 fontSize = '14px'),
+    defaultColDef = colDef(align = "left",
+                           headerStyle = list(fontWeight = "Bold", fontSize = "14px"),
+                           headerClass = "bar-sort-header"),
+  # RowStyle = function(index) {
+  #           if (index %in% c(nrow(referral_vol_site_data_mshs))) {
+  #             list(`border-top` = "2px solid rgb(184,184,184)",
+  #                  fontWeight = "Bold")
+  #           }
+  #         },
+    highlight = TRUE,
+    # filterable = TRUE,
+    pagination = FALSE,
+    # height = 800,
+    wrap = TRUE,
+  searchable = TRUE,
+
+  groupBy = c("MSHS", "PARENT_LOC_NAME"),
+
+  columnGroups = list(
+    colGroup(name = "", columns = c("MSHS", "PARENT_LOC_NAME", "RECORD_NAME", "DISPLAY_NAME", "PT_LOC_TYPE_C", "RECORD_CREATION_DT", "PT_ROOM_TYPE_C"),
+             headerStyle = list(color = "black", fontSize = "15px"),
+             sticky = "left"),
+    colGroup(name = paste0("PATTERN ASSIGNMENT STATUS"),
+             columns = c("MON_AM", "MON_PM", "MON_EVE",
+                         "TUE_AM", "TUE_PM", "TUE_EVE",
+                         "WED_AM", "WED_PM", "WED_EVE",
+                         "THU_AM", "THU_PM", "THU_EVE",
+                         "FRI_AM", "FRI_PM", "FRI_EVE"),
+             headerStyle = list(background = "#212070", color = "white", fontSize = "15px"))
+    
+    
+    # colGroup(name = paste0("No Show"),
+    #          columns = c("perc_noShow", "perc_noShowPlus", "perc_noShowPlusPlus",
+    #                      "perc_noShow_Physician", "perc_noShowPlus_Physician", "perc_noShowPlusPlus_Physician"),
+    #          headerStyle = list(background = "#d80b8c", color = "white", fontSize = "15px")),
+    # colGroup(name = paste0("New Patient Access"),
+    #          columns = c("perc_new_lead_14days", "perc_new_los",
+    #                      "perc_new_lead_14days_Physician", "perc_new_los_Physician"),
+    #          headerStyle = list(background = "#9E1A6D", color = "white", fontSize = "15px")),
+    # colGroup(name = paste0("Referrals + Ticket Scheduling"),
+    #          columns = c("total_referrals", "total_scheduled", "perc_conversion", "perc_completion",
+    #                      "perc_tkt_sent", "perc_tkt_sent_automated", 
+    #                      "perc_conversion_None", "perc_conversion_Automated", "perc_conversion_Scheduler", "perc_conversion_Both"),
+    #          headerStyle = list(background = "#00aeef", color = "white", fontSize = "15px")),
+    # colGroup(name = paste0("Digital Scheduling"),
+    #          columns = c("perc_avail_online", "perc_sched_online"),
+    #          headerStyle = list(background = "#7f7f7f", color = "white", fontSize = "15px"))
+    ),
+
+  columns = list(
+
+    MSHS = colDef(
+      minWidth = 150),
+    
+    PARENT_LOC_NAME = colDef(
+      minWidth = 400),
+    
+    RECORD_NAME = colDef(
+      minWidth = 400),
+
+    DISPLAY_NAME = colDef(
+      minWidth = 150),
+    
+    RECORD_CREATION_DT = colDef(
+      maxWidth = 150),
+
+    
+    MON_AM = colDef(
+      name = "MON AM",
+      maxWidth = 80,
+      headerStyle = list(background = "#212070", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalMON_AM = 0
+        let totalMON_AM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalMON_AM += row['MON_AM']
+          totalMON_AM_TOTAL += row['MON_AM_TOTAL']
+        })
+        return (totalMON_AM) / (totalMON_AM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['MON_AM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    MON_PM = colDef(
+      name = "MON PM",
+      maxWidth = 80,
+      headerStyle = list(background = "#212070", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalMON_PM = 0
+        let totalMON_PM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalMON_PM += row['MON_PM']
+          totalMON_PM_TOTAL += row['MON_PM_TOTAL']
+        })
+        return (totalMON_PM) / (totalMON_PM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['MON_PM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    MON_EVE = colDef(
+      name = "MON EVE",
+      maxWidth = 80,
+      headerStyle = list(background = "#212070", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalMON_EVE = 0
+        let totalMON_EVE_TOTAL = 0
+        rows.forEach(function(row) {
+          totalMON_EVE += row['MON_EVE']
+          totalMON_EVE_TOTAL += row['MON_EVE_TOTAL']
+        })
+        return (totalMON_EVE) / (totalMON_EVE_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['MON_EVE']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    TUE_AM = colDef(
+      name = "TUE AM",
+      maxWidth = 80,
+      headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalMON_AM = 0
+        let totalMON_AM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalMON_AM += row['TUE_AM']
+          totalMON_AM_TOTAL += row['MON_AM_TOTAL']
+        })
+        return (totalMON_AM) / (totalMON_AM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['MON_AM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    TUE_PM = colDef(
+      name = "TUE PM",
+      maxWidth = 80,
+      headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalTUE_PM = 0
+        let totalTUE_PM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalTUE_PM += row['TUE_PM']
+          totalTUE_PM_TOTAL += row['TUE_PM_TOTAL']
+        })
+        return (totalTUE_PM) / (totalTUE_PM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['TUE_PM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    TUE_EVE = colDef(
+      name = "TUE EVE",
+      maxWidth = 80,
+      headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalTUE_EVE = 0
+        let totalTUE_EVE_TOTAL = 0
+        rows.forEach(function(row) {
+          totalTUE_EVE += row['TUE_EVE']
+          totalTUE_EVE_TOTAL += row['TUE_EVE_TOTAL']
+        })
+        return (totalTUE_EVE) / (totalTUE_EVE_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['TUE_EVE']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    WED_AM = colDef(
+      name = "WED AM",
+      maxWidth = 80,
+      headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalWED_AM = 0
+        let totalWED_AM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalWED_AM += row['WED_AM']
+          totalWED_AM_TOTAL += row['WED_AM_TOTAL']
+        })
+        return (totalWED_AM) / (totalWED_AM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['WED_AM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    WED_PM = colDef(
+      name = "WED PM",
+      maxWidth = 80,
+      headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalWED_PM = 0
+        let totalWED_PM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalWED_PM += row['WED_PM']
+          totalWED_PM_TOTAL += row['WED_PM_TOTAL']
+        })
+        return (totalWED_PM) / (totalWED_PM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['WED_PM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    WED_EVE = colDef(
+      name = "WED EVE",
+      maxWidth = 80,
+      headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalWED_EVE = 0
+        let totalWED_EVE_TOTAL = 0
+        rows.forEach(function(row) {
+          totalWED_EVE += row['WED_EVE']
+          totalWED_EVE_TOTAL += row['WED_EVE_TOTAL']
+        })
+        return (totalWED_EVE) / (totalWED_EVE_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['WED_EVE']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    THU_AM = colDef(
+      name = "THU AM",
+      maxWidth = 80,
+      headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalTHU_AM = 0
+        let totalTHU_AM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalTHU_AM += row['THU_AM']
+          totalTHU_AM_TOTAL += row['THU_AM_TOTAL']
+        })
+        return (totalTHU_AM) / (totalTHU_AM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['THU_AM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    THU_PM = colDef(
+      name = "THU PM",
+      maxWidth = 80,
+      headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalTHU_PM = 0
+        let totalTHU_PM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalTHU_PM += row['THU_PM']
+          totalTHU_PM_TOTAL += row['THU_PM_TOTAL']
+        })
+        return (totalTHU_PM) / (totalTHU_PM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['THU_PM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    THU_EVE = colDef(
+      name = "THU EVE",
+      maxWidth = 80,
+      headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalTHU_EVE = 0
+        let totalTHU_EVE_TOTAL = 0
+        rows.forEach(function(row) {
+          totalTHU_EVE += row['THU_EVE']
+          totalTHU_EVE_TOTAL += row['THU_EVE_TOTAL']
+        })
+        return (totalTHU_EVE) / (totalTHU_EVE_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['THU_EVE']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    FRI_AM = colDef(
+      name = "FRI AM",
+      maxWidth = 80,
+      headerStyle = list(background = "#004376", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalFRI_AM = 0
+        let totalFRI_AM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalFRI_AM += row['FRI_AM']
+          totalFRI_AM_TOTAL += row['FRI_AM_TOTAL']
+        })
+        return (totalFRI_AM) / (totalFRI_AM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['FRI_AM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    FRI_PM = colDef(
+      name = "FRI PM",
+      maxWidth = 80,
+      headerStyle = list(background = "#004376", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalFRI_PM = 0
+        let totalFRI_PM_TOTAL = 0
+        rows.forEach(function(row) {
+          totalFRI_PM += row['FRI_PM']
+          totalFRI_PM_TOTAL += row['FRI_PM_TOTAL']
+        })
+        return (totalFRI_PM) / (totalFRI_PM_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['FRI_PM']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    FRI_EVE = colDef(
+      name = "FRI EVE",
+      maxWidth = 80,
+      headerStyle = list(background = "#004376", color = "white", fontWeight = "Bold", fontSize = "14px"),
+      # Calculate the aggregate conversion rate as `(total-pending) / total`
+      aggregate = JS("function(values, rows) {
+        let totalFRI_EVE = 0
+        let totalFRI_EVE_TOTAL = 0
+        rows.forEach(function(row) {
+          totalFRI_EVE += row['FRI_EVE']
+          totalFRI_EVE_TOTAL += row['FRI_EVE_TOTAL']
+        })
+        return (totalFRI_EVE) / (totalFRI_EVE_TOTAL) || 0
+      }"),
+      style = JS("function(rowInfo) {
+        var value = rowInfo.row['FRI_EVE']
+        if (value >= 1) {
+          var background = '#C6EFCE'
+          var color = '#006100'
+        } else if (value > 0) {
+          var background = '#FFEB9C'
+          var color = '#9C5700'
+        } else {
+          var background = '#FFC7CE'
+          var color = '#9C0006'
+        }
+        return { background: background, color: color, fontFamily: 'calibri', fontWeight: 'bold'}
+      }"),
+      format = colFormat(percent = TRUE, digits = 0)
+    ),
+    
+    
+    PARENT_LOCATION_ID = colDef(show =F),
+    RECORD_ID = colDef(show =F),
+    MON_AM_TOTAL = colDef(show =F),
+    MON_PM_TOTAL = colDef(show =F),
+    MON_EVE_TOTAL = colDef(show =F),
+    TUE_AM_TOTAL = colDef(show =F),
+    TUE_PM_TOTAL = colDef(show =F),
+    TUE_EVE_TOTAL = colDef(show =F),
+    WED_AM_TOTAL = colDef(show =F),
+    WED_PM_TOTAL = colDef(show =F),
+    WED_EVE_TOTAL = colDef(show =F),
+    THU_AM_TOTAL = colDef(show =F),
+    THU_PM_TOTAL = colDef(show =F),
+    THU_EVE_TOTAL = colDef(show =F),
+    FRI_AM_TOTAL = colDef(show =F),
+    FRI_PM_TOTAL = colDef(show =F),
+    FRI_EVE_TOTAL = colDef(show =F)
+
+  ) # Close Columns
+
+  ) # Close Reactable
+) # Close Taglist
+) # Close htmltools
+
+```
+<br/>
+<p style="font-size:10pt; font-style:italic">*New Patient is defined by level of service; Physician New Patient Ratio is calculated based on visits completed (Total New Patients Arrived / Total Patients Arrived) by Prov Type = Physician, Fellow, Resident, Nurse Practitioner, and Physician Assistant<p/>
+<p style="font-size:10pt; font-style:italic">-Template Utilization excludes providers with monthly provider utilization <35% or >200%.<p/>
+<p style="font-size:10pt; font-style:italic">*Primary Care includes Adolescent Medicine, Community and Preventative Medicine, Internal Medicine, Family Medicine, Pediatrics, Geriatrics, Urgent Care<p/>
+<br/>
